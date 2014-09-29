@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="tab_text_size">15sp</dimen>
+    <color name="tab_text_color">#9FC1FB</color>
+    <color name="tab_text_selected_color">#FFFFFF</color>
+    <color name="tab_text_disabled_color">#000000</color>
+    <color name="tab_ripple_color">#000000</color>
+
+    <color name="underline_color">#283593</color>
+    <dimen name="underline_height">5dp</dimen>
+
+    <integer name="max_column">4</integer>
+    <dimen name="nav_button_width">36dp</dimen>
+</resources>
