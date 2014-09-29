@@ -4,6 +4,7 @@ MaterialWidget
 Android L design widget in Android 4.0 ~ 4.4.
 
 ## TabIndicator ##
+Thanks [PagerSlidingTabStrip](https://github.com/astuetz/PagerSlidingTabStrip) to give me some inspiration!
 
 ### Screenshot ###
 
