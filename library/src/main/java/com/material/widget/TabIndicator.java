@@ -418,7 +418,9 @@ public class TabIndicator extends HorizontalScrollView implements Animator.Anima
         private int mTabWidth;
         private int mEndRadius;
         private long mStartTime;
-        private Point touchPoint = new Point();
+        private Rect mFingerRect;
+        private boolean mMoveOutside;
+        private Point mTouchPoint = new Point();
         private OnSelectTabListener mOnSelectTabListener;
 
         public TabView(Context context) {
@@ -450,15 +452,29 @@ public class TabIndicator extends HorizontalScrollView implements Animator.Anima
         public boolean onTouchEvent(@NonNull MotionEvent event) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    touchPoint.set(Math.round(event.getX()), Math.round(event.getY()));
+                    mMoveOutside = false;
+                    mFingerRect = new Rect(getLeft(), getTop(), getRight(), getBottom());
+                    mTouchPoint.set(Math.round(event.getX()), Math.round(event.getY()));
                     mState = StateTouchDown;
                     mStartTime = System.currentTimeMillis();
                     invalidate();
                     break;
+                case MotionEvent.ACTION_MOVE:
+                    if (!mFingerRect.contains(getLeft() + (int) event.getX(),
+                            getTop() + (int) event.getY())) {
+                        mMoveOutside = true;
+                        mState = StateNormal;
+                        mStartTime = System.currentTimeMillis();
+                        invalidate();
+                    }
+                    break;
                 case MotionEvent.ACTION_UP:
-                    mState = StateTouchUp;
-                    mStartTime = System.currentTimeMillis();
-                    invalidate();
+                    if (!mMoveOutside) {
+                        mState = StateTouchUp;
+                        mStartTime = System.currentTimeMillis();
+                        invalidate();
+                        performSelectAction();
+                    }
                     break;
             }
             return true;
@@ -493,10 +509,6 @@ public class TabIndicator extends HorizontalScrollView implements Animator.Anima
                         radius = 0;
                         mState = StateNormal;
                         postInvalidate();
-                        // OnClick event
-                        if (mOnSelectTabListener != null) {
-                            mOnSelectTabListener.onSelect(TabView.this);
-                        }
                     }
                 }
                 break;
@@ -504,7 +516,7 @@ public class TabIndicator extends HorizontalScrollView implements Animator.Anima
                     radius = 0;
                     break;
             }
-            canvas.drawCircle(touchPoint.x, touchPoint.y, radius, ripplePaint);
+            canvas.drawCircle(mTouchPoint.x, mTouchPoint.y, radius, ripplePaint);
         }
 
         public int getIndex() {
@@ -540,6 +552,8 @@ public class TabIndicator extends HorizontalScrollView implements Animator.Anima
         private int mType;
         private int mEndRadius;
         private long mStartTime;
+        private Rect mFingerRect;
+        private boolean mMoveOutside;
         private OnNavListener mOnNavListener;
 
         public NavButton(Context context) {
@@ -571,14 +585,28 @@ public class TabIndicator extends HorizontalScrollView implements Animator.Anima
         public boolean onTouchEvent(@NonNull MotionEvent event) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    mMoveOutside = false;
+                    mFingerRect = new Rect(getLeft(), getTop(), getRight(), getBottom());
                     mState = StateTouchDown;
                     mStartTime = System.currentTimeMillis();
                     invalidate();
                     break;
+                case MotionEvent.ACTION_MOVE:
+                    if (!mFingerRect.contains(getLeft() + (int) event.getX(),
+                            getTop() + (int) event.getY())) {
+                        mMoveOutside = true;
+                        mState = StateNormal;
+                        mStartTime = System.currentTimeMillis();
+                        invalidate();
+                    }
+                    break;
                 case MotionEvent.ACTION_UP:
-                    mState = StateTouchUp;
-                    mStartTime = System.currentTimeMillis();
-                    invalidate();
+                    if (!mMoveOutside) {
+                        mState = StateTouchUp;
+                        mStartTime = System.currentTimeMillis();
+                        invalidate();
+                        performNavAction();
+                    }
                     break;
             }
             return true;
@@ -613,10 +641,6 @@ public class TabIndicator extends HorizontalScrollView implements Animator.Anima
                         radius = 0;
                         mState = StateNormal;
                         postInvalidate();
-                        // OnClick event
-                        if (mOnNavListener != null) {
-                            mOnNavListener.onNav(NavButton.this);
-                        }
                     }
                 }
                 break;
