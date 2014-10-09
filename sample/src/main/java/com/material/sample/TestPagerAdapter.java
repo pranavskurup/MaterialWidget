@@ -23,7 +23,11 @@ public class TestPagerAdapter extends FragmentPagerAdapter implements TabIndicat
 
     @Override
     public Fragment getItem(int position) {
-        return TestFragment.newInstance(CONTENT[position]);
+        if (position == 0) {
+            return new WidgetFragment();
+        } else {
+            return TestFragment.newInstance(CONTENT[position]);
+        }
     }
 
     @Override

@@ -326,14 +326,12 @@ public class TabIndicator extends HorizontalScrollView implements Animator.Anima
     public void onAnimationEnd(Animator animator) {
         if (mCurrentNavButton != null) {
             switch (mCurrentNavButton.getType()) {
-                case NavButton.FORWARD: {
+                case NavButton.FORWARD:
                     pager.setCurrentItem(mCurrentIndex);
-                }
-                break;
-                case NavButton.BACKWARD: {
+                    break;
+                case NavButton.BACKWARD:
                     pager.setCurrentItem(mCurrentIndex);
-                }
-                break;
+                    break;
             }
         }
     }
