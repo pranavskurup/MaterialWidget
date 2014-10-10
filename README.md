@@ -8,7 +8,7 @@ Thank [PagerSlidingTabStrip](https://github.com/astuetz/PagerSlidingTabStrip) fo
 
 ### Screenshot ###
 
-![Imgur](http://i.imgur.com/TdG2i7L.png)
+![Imgur](http://i.imgur.com/4uT2SRw.png)
 
 ### Usage ###
 
