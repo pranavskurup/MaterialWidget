@@ -12,11 +12,11 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ViewPager viewPager = (ViewPager)findViewById(R.id.pager);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         TestPagerAdapter adapter = new TestPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
-        TabIndicator indicator = (TabIndicator)findViewById(R.id.indicator);
+        TabIndicator indicator = (TabIndicator) findViewById(R.id.indicator);
         indicator.setViewPager(viewPager);
     }
 }

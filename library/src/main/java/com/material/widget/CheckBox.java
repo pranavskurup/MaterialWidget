@@ -186,6 +186,7 @@ public class CheckBox extends CompoundButton {
             canvas.drawCircle(getWidth() / 2, getHeight() / 2, radius, ripplePaint);
 
             thumbPaint.setColor(mCheckedColor);
+            thumbPaint.setStrokeWidth(mBorderWidth);
             canvas.drawRoundRect(getRectFrame(), mCornerRadius, mCornerRadius, thumbPaint);
 
             markPaint.setColor(mMarkColor);

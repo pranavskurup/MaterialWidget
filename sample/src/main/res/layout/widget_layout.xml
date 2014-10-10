@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:widget="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:gravity="center"
               android:layout_width="match_parent"
@@ -13,4 +14,13 @@
     <com.material.widget.CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+    <com.material.widget.CircleButton
+            android:id="@+id/circle_button"
+            widget:circle_icon="@drawable/ic_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    <com.material.widget.PaperButton
+            widget:paper_text="Paper Button"
+            android:layout_width="160dp"
+            android:layout_height="54dp"/>
 </LinearLayout>

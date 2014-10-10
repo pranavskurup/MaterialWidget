@@ -77,26 +77,26 @@ public class TabIndicator extends HorizontalScrollView implements Animator.Anima
         addView(tabsContainer);
 
         TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.TabIndicator);
-        mTextSize = attributes.getDimensionPixelSize(R.styleable.TabIndicator_text_size,
+        mTextSize = attributes.getDimensionPixelSize(R.styleable.TabIndicator_tab_text_size,
                 getResources().getDimensionPixelSize(R.dimen.tab_text_size));
 
-        mTextColor = attributes.getColor(R.styleable.TabIndicator_text_color,
+        mTextColor = attributes.getColor(R.styleable.TabIndicator_tab_text_color,
                 getResources().getColor(R.color.tab_text_color));
-        mTextSelectedColor = attributes.getColor(R.styleable.TabIndicator_text_selected_color,
+        mTextSelectedColor = attributes.getColor(R.styleable.TabIndicator_tab_text_selected_color,
                 getResources().getColor(R.color.tab_text_selected_color));
-        mTextDisabledColor = attributes.getColor(R.styleable.TabIndicator_text_disabled_color,
+        mTextDisabledColor = attributes.getColor(R.styleable.TabIndicator_tab_text_disabled_color,
                 getResources().getColor(R.color.tab_text_disabled_color));
-        mRippleColor = attributes.getColor(R.styleable.TabIndicator_ripple_color,
+        mRippleColor = attributes.getColor(R.styleable.TabIndicator_tab_ripple_color,
                 getResources().getColor(R.color.tab_ripple_color));
 
-        mUnderLineColor = attributes.getColor(R.styleable.TabIndicator_underline_color,
-                getResources().getColor(R.color.underline_color));
-        mUnderLineHeight = attributes.getDimensionPixelSize(R.styleable.TabIndicator_underline_height,
-                getResources().getDimensionPixelSize(R.dimen.underline_height));
+        mUnderLineColor = attributes.getColor(R.styleable.TabIndicator_tab_underline_color,
+                getResources().getColor(R.color.tab_underline_color));
+        mUnderLineHeight = attributes.getDimensionPixelSize(R.styleable.TabIndicator_tab_underline_height,
+                getResources().getDimensionPixelSize(R.dimen.tab_underline_height));
 
-        mMaxColumn = attributes.getInteger(R.styleable.TabIndicator_max_column,
-                getResources().getInteger(R.integer.max_column));
-        mNavButtonWidth = getResources().getDimensionPixelSize(R.dimen.nav_button_width);
+        mMaxColumn = attributes.getInteger(R.styleable.TabIndicator_tab_max_column,
+                getResources().getInteger(R.integer.tab_max_column));
+        mNavButtonWidth = getResources().getDimensionPixelSize(R.dimen.tab_nav_button_width);
         attributes.recycle();
 
         linePaint.setStyle(Paint.Style.FILL);

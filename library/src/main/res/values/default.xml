@@ -6,10 +6,10 @@
     <color name="tab_text_selected_color">#FFFFFF</color>
     <color name="tab_text_disabled_color">#000000</color>
     <color name="tab_ripple_color">#000000</color>
-    <color name="underline_color">#283593</color>
-    <dimen name="underline_height">5dp</dimen>
-    <integer name="max_column">4</integer>
-    <dimen name="nav_button_width">36dp</dimen>
+    <color name="tab_underline_color">#283593</color>
+    <dimen name="tab_underline_height">5dp</dimen>
+    <integer name="tab_max_column">4</integer>
+    <dimen name="tab_nav_button_width">36dp</dimen>
 
     <!-- Switch Default -->
     <dimen name="switch_width">86dp</dimen>
@@ -47,4 +47,18 @@
     <color name="checkbox_color">#6d6d6d</color>
     <color name="checkbox_checked_color">#55b03d</color>
     <color name="checkbox_mark_color">#eeeeee</color>
+
+    <!-- CircleButton Default -->
+    <dimen name="circle_button_width">72dp</dimen>
+    <dimen name="circle_button_height">72dp</dimen>
+    <color name="circle_button_color">#ff3f51b5</color>
+    <color name="circle_button_shadow_color">#ff000000</color>
+
+    <!-- PaperButton Default -->
+    <dimen name="paper_text_size">15sp</dimen>
+    <color name="paper_text_color">#60000000</color>
+    <color name="paper_button_color">#ffffffff</color>
+    <color name="paper_button_shadow_color">#000000</color>
+    <dimen name="paper_button_corner_radius">2dp</dimen>
+    <dimen name="paper_padding">7dp</dimen>
 </resources>
