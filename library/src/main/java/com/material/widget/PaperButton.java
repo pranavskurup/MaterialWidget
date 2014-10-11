@@ -207,12 +207,11 @@ public class PaperButton extends View {
                             / ANIMATION_DURATION
                             + MIN_SHADOW_COLOR_ALPHA;
                     shadowColor = changeColorAlpha(mShadowColor, shadowAlpha);
-                    postInvalidate();
                 } else {
                     radius = getWidth() / 2;
                     shadowColor = changeColorAlpha(mShadowColor, MAX_SHADOW_COLOR_ALPHA);
-                    postInvalidate();
                 }
+                postInvalidate();
                 break;
             case StateTouchUp:
                 if (elapsed < ANIMATION_DURATION) {
@@ -224,13 +223,13 @@ public class PaperButton extends View {
                             / ANIMATION_DURATION
                             + MIN_SHADOW_COLOR_ALPHA;
                     shadowColor = changeColorAlpha(mShadowColor, shadowAlpha);
-                    postInvalidate();
                 } else {
                     mState = StateNormal;
                     radius = 0;
+                    ripplePaint.setAlpha(0);
                     shadowColor = changeColorAlpha(mShadowColor, MIN_SHADOW_COLOR_ALPHA);
-                    postInvalidate();
                 }
+                postInvalidate();
                 break;
         }
         backgroundPaint.setShadowLayer(mShadowRadius, mShadowOffsetX, mShadowOffsetY, shadowColor);

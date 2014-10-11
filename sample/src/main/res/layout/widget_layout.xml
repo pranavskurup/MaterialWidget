@@ -23,4 +23,8 @@
             widget:paper_text="Paper Button"
             android:layout_width="160dp"
             android:layout_height="54dp"/>
+    <com.material.widget.CircularProgress
+            widget:circular_progress_size="Normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 </LinearLayout>

@@ -1,6 +1,7 @@
 package com.material.widget;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.*;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
@@ -15,8 +16,8 @@ import android.widget.CompoundButton;
  */
 public class CheckBox extends CompoundButton {
 
-    private static final float MarkRatio = 0.3f;
     private static final long ANIMATION_DURATION = 200;
+    private static final float MarkRatio = 0.3f;
     private static final int StateNormal = 1;
     private static final int StateTouchDown = 2;
     private static final int StateTouchUp = 3;
@@ -54,8 +55,12 @@ public class CheckBox extends CompoundButton {
 
     public CheckBox(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mColor = getResources().getColor(R.color.checkbox_color);
-        mCheckedColor = getResources().getColor(R.color.checkbox_checked_color);
+        TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.CheckBox);
+        mColor = attributes.getColor(R.styleable.CheckBox_checkbox_color,
+                getResources().getColor(R.color.checkbox_color));
+        mCheckedColor = attributes.getColor(R.styleable.CheckBox_checkbox_checked_color,
+                getResources().getColor(R.color.checkbox_checked_color));
+        attributes.recycle();
         mMarkColor = getResources().getColor(R.color.checkbox_mark_color);
         mCheckBoxWidth = getResources().getDimensionPixelSize(R.dimen.checkbox_width);
         mCheckBoxHeight = getResources().getDimensionPixelSize(R.dimen.checkbox_height);
@@ -151,11 +156,15 @@ public class CheckBox extends CompoundButton {
                 break;
             case MotionEvent.ACTION_UP:
                 if (!mMoveOutside) {
-                    mState = StateNormal;
+                    mState = StateTouchUp;
                     setChecked(!isChecked());
                     mStartTime = System.currentTimeMillis();
                     invalidate();
                 }
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                mState = StateNormal;
+                invalidate();
                 break;
         }
         return true;
@@ -164,28 +173,44 @@ public class CheckBox extends CompoundButton {
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
-        if (isChecked()) {
-            int radius = 0;
-            long elapsed = System.currentTimeMillis() - mStartTime;
-            switch (mState) {
-                case StateNormal:
-                    break;
-                case StateTouchDown: {
-                    if (elapsed < ANIMATION_DURATION) {
-                        radius = Math.round(elapsed * mRippleRadius / ANIMATION_DURATION);
-                        postInvalidate();
-                    } else {
-                        radius = mRippleRadius;
-                    }
-                }
+        int rippleRadius = 0;
+        long elapsed = System.currentTimeMillis() - mStartTime;
+        switch (mState) {
+            case StateNormal:
                 break;
-                case StateTouchUp:
-                    break;
-            }
+            case StateTouchDown:
+                ripplePaint.setAlpha(255);
+                if (elapsed < ANIMATION_DURATION) {
+                    rippleRadius = Math.round(elapsed * mRippleRadius / ANIMATION_DURATION);
+                } else {
+                    rippleRadius = mRippleRadius;
+                }
+                postInvalidate();
+                break;
+            case StateTouchUp:
+                if (elapsed < ANIMATION_DURATION) {
+                    int alpha = Math.round((ANIMATION_DURATION - elapsed) * 255 / ANIMATION_DURATION);
+                    ripplePaint.setAlpha(alpha);
+                    rippleRadius = Math.round((ANIMATION_DURATION - elapsed) * mRippleRadius / ANIMATION_DURATION);
+                } else {
+                    mState = StateNormal;
+                    rippleRadius = 0;
+                    ripplePaint.setAlpha(0);
+                }
+                postInvalidate();
+                break;
+        }
+
+        if (isChecked()) {
             ripplePaint.setColor(rippleColor(mCheckedColor));
-            canvas.drawCircle(getWidth() / 2, getHeight() / 2, radius, ripplePaint);
+            canvas.drawCircle(getWidth() / 2, getHeight() / 2, rippleRadius, ripplePaint);
 
             thumbPaint.setColor(mCheckedColor);
+            thumbPaint.setStyle(Paint.Style.FILL);
+            canvas.drawRoundRect(getRectFrame(), mCornerRadius, mCornerRadius, thumbPaint);
+
+            thumbPaint.setColor(mCheckedColor);
+            thumbPaint.setStyle(Paint.Style.STROKE);
             thumbPaint.setStrokeWidth(mBorderWidth);
             canvas.drawRoundRect(getRectFrame(), mCornerRadius, mCornerRadius, thumbPaint);
 
@@ -194,27 +219,9 @@ public class CheckBox extends CompoundButton {
             markPaint.setStyle(Paint.Style.STROKE);
             markPaint.setStrokeJoin(Paint.Join.ROUND);
             canvas.drawPath(getMarkPath(), markPaint);
-
         } else {
-            int radius = 0;
-            long elapsed = System.currentTimeMillis() - mStartTime;
-            switch (mState) {
-                case StateNormal:
-                    break;
-                case StateTouchDown: {
-                    if (elapsed < ANIMATION_DURATION) {
-                        radius = Math.round(elapsed * mRippleRadius / ANIMATION_DURATION);
-                        postInvalidate();
-                    } else {
-                        radius = mRippleRadius;
-                    }
-                }
-                break;
-                case StateTouchUp:
-                    break;
-            }
             ripplePaint.setColor(rippleColor(mColor));
-            canvas.drawCircle(getWidth() / 2, getHeight() / 2, radius, ripplePaint);
+            canvas.drawCircle(getWidth() / 2, getHeight() / 2, rippleRadius, ripplePaint);
 
             borderPaint.setColor(mColor);
             borderPaint.setStyle(Paint.Style.STROKE);

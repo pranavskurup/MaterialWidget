@@ -23,14 +23,14 @@ Thank [PagerSlidingTabStrip](https://github.com/astuetz/PagerSlidingTabStrip) fo
 ### Attribute ###
 
 ```xml
-<attr name="text_size" format="dimension"/>
-<attr name="text_color" format="color"/>
-<attr name="text_selected_color" format="color"/>
-<attr name="text_disabled_color" format="color"/>
-<attr name="ripple_color" format="color"/>
-<attr name="underline_color" format="color"/>
-<attr name="underline_height" format="dimension"/>
-<attr name="max_column" format="integer"/>
+<attr name="tab_text_size" format="dimension"/>
+<attr name="tab_text_color" format="color"/>
+<attr name="tab_text_selected_color" format="color"/>
+<attr name="tab_text_disabled_color" format="color"/>
+<attr name="tab_ripple_color" format="color"/>
+<attr name="tab_underline_color" format="color"/>
+<attr name="tab_underline_height" format="dimension"/>
+<attr name="tab_max_column" format="integer"/>
 ```
 
 ## CircleButton ##

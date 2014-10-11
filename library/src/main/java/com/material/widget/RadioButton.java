@@ -1,6 +1,7 @@
 package com.material.widget;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -50,14 +51,20 @@ public class RadioButton extends CompoundButton {
 
     public RadioButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mColor = getResources().getColor(R.color.radio_color);
-        mCheckedColor = getResources().getColor(R.color.radio_checked_color);
+        TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.RadioButton);
+        mColor = attributes.getColor(R.styleable.RadioButton_radio_color,
+                getResources().getColor(R.color.radio_color));
+        mCheckedColor = attributes.getColor(R.styleable.RadioButton_radio_checked_color,
+                getResources().getColor(R.color.radio_checked_color));
+        attributes.recycle();
         mRadioWidth = getResources().getDimensionPixelSize(R.dimen.radio_width);
         mRadioHeight = getResources().getDimensionPixelSize(R.dimen.radio_height);
         mBorderRadius = getResources().getDimensionPixelSize(R.dimen.radio_border_radius);
         mThumbRadius = getResources().getDimensionPixelSize(R.dimen.radio_thumb_radius);
         mRippleRadius = getResources().getDimensionPixelSize(R.dimen.radio_ripple_radius);
         mStrokeWidth = getResources().getDimensionPixelSize(R.dimen.radio_stroke_width);
+
+        thumbPaint.setColor(mCheckedColor);
     }
 
     @Override
@@ -122,18 +129,22 @@ public class RadioButton extends CompoundButton {
                 break;
             case MotionEvent.ACTION_UP:
                 if (!mMoveOutside) {
-                    mState = StateNormal;
+                    mState = StateTouchUp;
                     setChecked(!isChecked());
                     mStartTime = System.currentTimeMillis();
                     invalidate();
                 }
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                mState = StateNormal;
+                invalidate();
                 break;
         }
         return true;
     }
 
     private int rippleColor(int color) {
-        int alpha = Math.round(Color.alpha(color) * 0.3f);
+        int alpha = Math.round(Color.alpha(color) * 0.2f);
         int red = Color.red(color);
         int green = Color.green(color);
         int blue = Color.blue(color);
@@ -143,59 +154,54 @@ public class RadioButton extends CompoundButton {
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
-        if (isChecked()) {
-            int radius = 0;
-            long elapsed = System.currentTimeMillis() - mStartTime;
-            switch (mState) {
-                case StateNormal:
-                    break;
-                case StateTouchDown: {
-                    if (elapsed < ANIMATION_DURATION) {
-                        radius = Math.round(elapsed * mRippleRadius / ANIMATION_DURATION);
-                        postInvalidate();
-                    } else {
-                        radius = mRippleRadius;
-                    }
-                }
+        int rippleRadius = 0;
+        int thumbRadius = isChecked() ? mThumbRadius : 0;
+        long elapsed = System.currentTimeMillis() - mStartTime;
+        switch (mState) {
+            case StateNormal:
                 break;
-                case StateTouchUp:
-                    break;
-            }
+            case StateTouchDown:
+                ripplePaint.setAlpha(255);
+                if (elapsed < ANIMATION_DURATION) {
+                    rippleRadius = Math.round(elapsed * mRippleRadius / ANIMATION_DURATION);
+                } else {
+                    rippleRadius = mRippleRadius;
+                }
+                postInvalidate();
+                break;
+            case StateTouchUp:
+                if (elapsed < ANIMATION_DURATION) {
+                    int alpha = Math.round((ANIMATION_DURATION - elapsed) * 255 / ANIMATION_DURATION);
+                    ripplePaint.setAlpha(alpha);
+                    rippleRadius = Math.round((ANIMATION_DURATION - elapsed) * mRippleRadius / ANIMATION_DURATION);
+                    if (isChecked()) {
+                        thumbRadius = Math.round(elapsed * mThumbRadius / ANIMATION_DURATION);
+                    } else {
+                        thumbRadius = Math.round((ANIMATION_DURATION - elapsed) * mThumbRadius / ANIMATION_DURATION);
+                    }
+                } else {
+                    mState = StateNormal;
+                    rippleRadius = 0;
+                    ripplePaint.setAlpha(0);
+                }
+                postInvalidate();
+                break;
+        }
+        if (isChecked()) {
             ripplePaint.setColor(rippleColor(mCheckedColor));
-            canvas.drawCircle(getWidth() / 2, getHeight() / 2, radius, ripplePaint);
 
             borderPaint.setColor(mCheckedColor);
             borderPaint.setStyle(Paint.Style.STROKE);
             borderPaint.setStrokeWidth(mStrokeWidth);
-            canvas.drawCircle(getWidth() / 2, getHeight() / 2, mBorderRadius, borderPaint);
-
-            thumbPaint.setColor(mCheckedColor);
-            canvas.drawCircle(getWidth() / 2, getHeight() / 2, mThumbRadius, thumbPaint);
         } else {
-            int radius = 0;
-            long elapsed = System.currentTimeMillis() - mStartTime;
-            switch (mState) {
-                case StateNormal:
-                    break;
-                case StateTouchDown: {
-                    if (elapsed < ANIMATION_DURATION) {
-                        radius = Math.round(elapsed * mRippleRadius / ANIMATION_DURATION);
-                        postInvalidate();
-                    } else {
-                        radius = mRippleRadius;
-                    }
-                }
-                break;
-                case StateTouchUp:
-                    break;
-            }
             ripplePaint.setColor(rippleColor(mColor));
-            canvas.drawCircle(getWidth() / 2, getHeight() / 2, radius, ripplePaint);
 
             borderPaint.setColor(mColor);
             borderPaint.setStyle(Paint.Style.STROKE);
             borderPaint.setStrokeWidth(mStrokeWidth);
-            canvas.drawCircle(getWidth() / 2, getHeight() / 2, mBorderRadius, borderPaint);
         }
+        canvas.drawCircle(getWidth() / 2, getHeight() / 2, rippleRadius, ripplePaint);
+        canvas.drawCircle(getWidth() / 2, getHeight() / 2, mBorderRadius, borderPaint);
+        canvas.drawCircle(getWidth() / 2, getHeight() / 2, thumbRadius, thumbPaint);
     }
 }
